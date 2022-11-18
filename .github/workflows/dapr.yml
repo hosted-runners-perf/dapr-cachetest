@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-2019, macOS-latest]
-        target_arch: [arm, arm64, amd64]
+        target_arch: [amd64]
         include:
           - os: ubuntu-latest
             target_os: linux
@@ -42,25 +42,12 @@ jobs:
             target_os: windows
           - os: macOS-latest
             target_os: darwin
-        exclude:
-          - os: windows-2019
-            target_arch: arm
-          - os: windows-2019
-            target_arch: arm64
-          - os: macOS-latest
-            target_arch: arm
     steps:
       - name: Set up Go ${{ env.GOVER }}
         uses: actions/setup-go@v2
         with:
           cache: true
           go-version: ${{ env.GOVER }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-        if: matrix.target_os == 'linux' && github.event_name != 'pull_request'
-        with:
-          image: tonistiigi/binfmt:latest
-          platforms: arm64
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         if: matrix.target_os == 'linux' && github.event_name != 'pull_request'
