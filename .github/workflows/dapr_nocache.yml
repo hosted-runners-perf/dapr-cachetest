@@ -98,20 +98,8 @@ jobs:
           rm -r protoc protoc-${{ env.PROTOC_VERSION }}-linux-x86_64.zip
           make init-proto
           make gen-proto check-proto-diff
-      - name: Run make test
+      - name: Run make build
         if: matrix.target_arch == 'amd64'
         env:
           COVERAGE_OPTS: "-coverprofile=coverage.txt -covermode=atomic"
-        run: make test
-      - name: Codecov
-        if: matrix.target_arch == 'amd64' && matrix.target_os == 'linux'
-        uses: codecov/codecov-action@v1
-      - name: Run make release to build and archive binaries
-        env:
-          GOOS: ${{ matrix.target_os }}
-          GOARCH: ${{ matrix.target_arch }}
-          ARCHIVE_OUT_DIR: ${{ env.ARCHIVE_OUTDIR }}
-        run: |
-          mkdir -p "${ARCHIVE_OUT_DIR}"
-          make release
-        shell: bash
+        run: make build
