@@ -11,7 +11,7 @@
 # limitations under the License.
 #
 
-name: dapr
+name: dapr Cached
 
 on:
   workflow_dispatch:
